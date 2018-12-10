@@ -7,14 +7,12 @@ import {FS_CLIENT_SECRET} from '../data/constant'
 import {FOURSQUAREDATA} from '../data/foursquaredata'
 import LocationList from './LocationList'
 
-
-
-let map ={};
-
 class App extends Component {
 
 state = {
-  locations: locations
+  locations: locations ,
+  map: {},
+  infoWindow: {}
 }
 
 
@@ -24,94 +22,91 @@ state = {
       this.loadScript();
   }
 
-
-  getFourSquareData() {
-    let places = [];
-    locations.forEach((location,index) => {
-      places.push(FOURSQUAREDATA.response.venue);
-      if(locations.length === (index+1)){
-        this.setState({
-          markers: places
-        });
-      }
-
-    });
-    /*
-    locations.map((location,index) => {
-      fetch(`https://api.foursquare.com/v2/venues/${location.venueId}` +
-        `?client_id=${FS_CLIENT_ID}` +
-        `&client_secret=${FS_CLIENT_SECRET}` +
-        `&v=20181205`)
-        .then(response => response.json())
-        .then( data => {
-           if(data.meta.code === 200){
-             places.push(data.response.venue);
-             console.log("data"+data.response.venue.json())
-             if(locations.length === (index+1)){
-               this.setState({
-                 markers: places
-               });
-             }
-           }
-        })
-        .catch(error => {
-          console.log("error in getting foursquare data"+error);
-        });
-    });
-    */
-
-    this.setState({
-      markers: places
-    });
-
-  }
-
   initMap() {
-     map = new window.google.maps.Map(document.getElementById('map'), {
-          center: { lat: 40.7127753, lng: -74.0059728 },
-          zoom: 14,
-          mapTypeControl: false
+     let map = new window.google.maps.Map(document.getElementById('map'), {
+        center: { lat: 40.7127753, lng: -74.0059728 },
+        zoom: 15,
+        mapTypeControl: false
     });
 
-    let infoWindow = new window.google.maps.InfoWindow({});
-    const bounds = new window.google.maps.LatLngBounds();
+    let infoWindow = new window.google.maps.InfoWindow({maxWidth: 320});
+    this.setState({
+      map: map,
+      infoWindow: infoWindow
+    });
+  const bounds = new window.google.maps.LatLngBounds();
 
     let locationswithMapInfo = [];
     locations.forEach((location,index) => {
-
       var marker = new window.google.maps.Marker({
-        position:  new window.google.maps.LatLng(location.lat, location.long),
+        position:  new window.google.maps.LatLng(location.latitude, location.longitude),
         map: map,
         title: location.name,
         animation: window.google.maps.Animation.DROP,
         id :index
       });
+
       marker.addListener('click',() => {
-        this.populateInfoWindow(marker,infoWindow);
+        this.populateInfoWindow(marker);
+        marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(function(){ marker.setAnimation(null) }, 550)
       });
+
+
       location.marker = marker;
       location.display = true;
       locationswithMapInfo.push(location);
-    //  bounds.extend(marker.position);
+      bounds.extend(marker.position);
     });
+    map.fitBounds(bounds);
 
      this.setState({
             locations: locationswithMapInfo
         });
 
-  //  map.fitBounds(bounds);
   }
 
-   populateInfoWindow(marker,infoWindow){
-   if(marker!==infoWindow.marker){
+
+
+   populateInfoWindow(marker) {
+   const infoWindow = this.state.infoWindow;
+   if(marker !== infoWindow.marker){
        infoWindow.marker=marker;
-       infoWindow.setContent('<div>'+marker.title+'</div>');
-       infoWindow.open(map,marker);
+       infoWindow.setContent('Loading Data..');
+       infoWindow.open(this.state.map,marker);
+       this.getMarkerInfo(marker);
        infoWindow.addListener('closeclick',function(){
        infoWindow.marker=null;
        });
      }
+   }
 
+   getMarkerInfo(marker) {
+      const url = "https://api.foursquare.com/v2/venues/search?client_id=" + FS_CLIENT_ID + "&client_secret=" + FS_CLIENT_SECRET + "&v=20130815&ll=" + marker.getPosition().lat() + "," + marker.getPosition().lng() + "&limit=1";
+      const data =  FOURSQUAREDATA;
+      let location_data = data.response.venues[0];
+      let content = `<b>Verified Location: </b> (${location_data.verified ? 'Yes' : 'No'}) <br>
+                    <b>Number of CheckIn: </b> ${location_data.stats.checkinsCount} <br>
+                    <b>Number of Users: </b> ${location_data.stats.usersCount} <br>
+                    <b>Number of Tips: </b>${location_data.stats.tipCount}  <br>
+                    <a href="https://foursquare.com/v/${location_data.id}" target="_blank">Read More on Foursquare Website</a>`;
+      this.state.infoWindow.setContent(content);
+      /*
+      fetch(url)
+      .then(response => response.json())
+      .then( data => {
+        let location_data = data.response.venues[0];
+        let verified = '<b>Verified Location: </b>' + (location_data.verified ? 'Yes' : 'No') + '<br>';
+        let checkinsCount = '<b>Number of CheckIn: </b>' + location_data.stats.checkinsCount + '<br>';
+        let usersCount = '<b>Number of Users: </b>' + location_data.stats.usersCount + '<br>';
+        let tipCount = '<b>Number of Tips: </b>' + location_data.stats.tipCount + '<br>';
+        let readMore = '<a href="https://foursquare.com/v/'+ location_data.id +'" target="_blank">Read More on Foursquare Website</a>'
+        this.state.infoWindow.setContent(checkinsCount + usersCount + tipCount + verified + readMore);
+      })
+      .catch(error => {
+        this.state.infoWindow.setContent("Sorry foursqualre data can't be loaded");
+      });
+      */
    }
 
 
@@ -131,9 +126,16 @@ state = {
 
   render() {
     return (
-      <main>
-        <LocationList locationList={locations}/>
-        <div id="map" aria-label="Map" role="application"> Map </div>
+      <main className='App'>
+       <h1>New York, NY</h1>
+       <div className="outerbox">
+       <div className="box1" aria-label="List of Locations">
+        <LocationList locationList={locations} onClickLocations={(marker) => this.populateInfoWindow(marker)}/>
+      </div>
+      <div className="box2">
+        <div id="map" tabIndex="-1" role="application"> Map </div>
+      </div>
+        </div>
       </main>
     );
   }
