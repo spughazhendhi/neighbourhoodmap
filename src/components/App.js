@@ -127,15 +127,15 @@ state = {
   render() {
     return (
       <ErrorBoundary>
-      <main>
-      <Header/>
-       <div className="outerbox">
-          <LocationList locationList={locations} onClickLocations={(marker) => this.populateInfoWindow(marker)}/>
-        <div className="mapbox">
-          <Map/>
-        </div>
-        </div>
-      </main>
+        <main>
+          <Header/>
+          <div className="outerbox">
+            <LocationList locationList={locations} onClickLocations={(marker) => this.populateInfoWindow(marker)}/>
+            <div className="mapbox">
+              <Map/>
+            </div>
+          </div>
+       </main>
       </ErrorBoundary>
     );
   }

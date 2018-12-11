@@ -64,16 +64,16 @@ clearQuery() {
   render() {
      return (
       <div className="locationbox" aria-label="List of Locations">
-      <SearchFilter query={this.state.query} filterLocations={b => this.filterLocations(b)} />
-          <ul>
+        <SearchFilter query={this.state.query} filterLocations={b => this.filterLocations(b)} />
+        <ul>
             {
               (this.state.suggestions && this.state.locations.length >0) ? this.state.locations.map((location,index) =>
                           (<LocationItem key={index} index={index} location={location}  onClickLocation={(marker) => this.props.onClickLocations(marker)} />)
                         ) :""
              }
-          </ul>
-           <button className="togglebutton" onClick={() => this.toggleSuggestions()}>Show/Hide Suggestions</button>
-       </div>
+        </ul>
+        <button className="togglebutton" onClick={() => this.toggleSuggestions()}>Show/Hide Suggestions</button>
+      </div>
      )
   }
 

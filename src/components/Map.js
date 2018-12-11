@@ -4,7 +4,7 @@ class Map extends React.Component {
 
   render(){
     return(
-        <div id="map" tabIndex="-1" role="application"> Map </div>
+        <div id="map" aria-label="Map" tabIndex="-1" role="application"> Map </div>
       )
   }
 }

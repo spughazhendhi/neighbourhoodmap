@@ -8,8 +8,8 @@ class SearchFilter extends React.Component {
   }
   render(){
     return(
-      <input type="text" role="search" aria-labelledby="Location filter" id="search" className="filter-input"
-        placeholder="Enter value to filter" value={this.props.query}  onChange={event => this.props.filterLocations(event.target.value)} />
+            <input type="text" role="search" aria-labelledby="Location filter" id="search" className="filter-input"
+            placeholder="Enter value to filter" value={this.props.query}  onChange={event => this.props.filterLocations(event.target.value)} />
       )
   }
 }

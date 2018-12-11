@@ -10,7 +10,7 @@ class LocationItem extends React.Component {
   render(){
     const location = this.props.location;
     return(
-       	<li key={this.props.index}  onClick={ () => this.props.onClickLocation(location.marker)} role="button" className="locationname" tabIndex="0">{location.name}</li>
+       	    <li key={this.props.index}  onClick={ () => this.props.onClickLocation(location.marker)} role="button" className="locationname" tabIndex="0">{location.name}</li>
       )
   }
 }
