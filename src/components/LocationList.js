@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LocationItem from './LocationItem';
-import SearchFilter from './LocationItem';
+import SearchFilter from './SearchFilter';
 import PropTypes from 'prop-types'
 
 class LocationList extends Component {
@@ -49,7 +49,8 @@ clearQuery() {
   this.props.locationList.forEach(location => location.marker.setVisible(true));
   this.setState({
     query: '',
-    locations: this.props.locationList
+    locations: this.props.locationList,
+    suggestions: true
   });
 }
 
@@ -62,10 +63,8 @@ clearQuery() {
 
   render() {
      return (
-       <div className="search">
-
-        <input type="text" role="search" aria-labelledby="filter" id="search" className="filter-input"
-          placeholder="Enter value to filter" value={this.state.query}  onChange={event => this.filterLocations(event.target.value)} />
+      <div className="locationbox" aria-label="List of Locations">
+      <SearchFilter query={this.state.query} filterLocations={b => this.filterLocations(b)} />
           <ul>
             {
               (this.state.suggestions && this.state.locations.length >0) ? this.state.locations.map((location,index) =>
@@ -73,7 +72,7 @@ clearQuery() {
                         ) :""
              }
           </ul>
-           <button className="button" onClick={() => this.toggleSuggestions()}>Show/Hide Suggestions</button>
+           <button className="togglebutton" onClick={() => this.toggleSuggestions()}>Show/Hide Suggestions</button>
        </div>
      )
   }

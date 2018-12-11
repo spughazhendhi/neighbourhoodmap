@@ -6,6 +6,9 @@ import {FS_CLIENT_ID} from '../data/constant'
 import {FS_CLIENT_SECRET} from '../data/constant'
 import {FOURSQUAREDATA} from '../data/foursquaredata'
 import LocationList from './LocationList'
+import Header from './Header'
+import ErrorBoundary from './ErrorBoundary'
+import Map from './Map'
 
 class App extends Component {
 
@@ -82,31 +85,28 @@ state = {
    }
 
    getMarkerInfo(marker) {
-      const url = "https://api.foursquare.com/v2/venues/search?client_id=" + FS_CLIENT_ID + "&client_secret=" + FS_CLIENT_SECRET + "&v=20130815&ll=" + marker.getPosition().lat() + "," + marker.getPosition().lng() + "&limit=1";
+      const url = `https://api.foursquare.com/v2/venues/search?client_id=${FS_CLIENT_ID}
+                  &client_secret=${FS_CLIENT_SECRET} &v=20181212&ll=${marker.getPosition().lat()},${marker.getPosition().lng()} &limit=1`;
       const data =  FOURSQUAREDATA;
-      let location_data = data.response.venues[0];
-      let content = `<b>Verified Location: </b> (${location_data.verified ? 'Yes' : 'No'}) <br>
-                    <b>Number of CheckIn: </b> ${location_data.stats.checkinsCount} <br>
-                    <b>Number of Users: </b> ${location_data.stats.usersCount} <br>
-                    <b>Number of Tips: </b>${location_data.stats.tipCount}  <br>
-                    <a href="https://foursquare.com/v/${location_data.id}" target="_blank">Read More on Foursquare Website</a>`;
+      let venue = data.response.venues[0];
+      let content = `<b>Name : </b> ${venue.name}<br>
+                    <b>Address : </b> ${venue.location.formattedAddress} <br>
+                    (Details from Foursquare) <br>
+                    <a href="https://foursquare.com/v/${venue.id}" target="_blank">Read More on Foursquare Website</a>`;
       this.state.infoWindow.setContent(content);
-      /*
+/*
       fetch(url)
       .then(response => response.json())
       .then( data => {
-        let location_data = data.response.venues[0];
-        let verified = '<b>Verified Location: </b>' + (location_data.verified ? 'Yes' : 'No') + '<br>';
-        let checkinsCount = '<b>Number of CheckIn: </b>' + location_data.stats.checkinsCount + '<br>';
-        let usersCount = '<b>Number of Users: </b>' + location_data.stats.usersCount + '<br>';
-        let tipCount = '<b>Number of Tips: </b>' + location_data.stats.tipCount + '<br>';
-        let readMore = '<a href="https://foursquare.com/v/'+ location_data.id +'" target="_blank">Read More on Foursquare Website</a>'
-        this.state.infoWindow.setContent(checkinsCount + usersCount + tipCount + verified + readMore);
+        let venue = data.response.venues[0];
+        let content = `<b>Address provided by Foursquare : </b> ${venue.location.formattedAddress} <br>
+                      <a href="https://foursquare.com/v/${venue.id}" target="_blank">Read More on Foursquare Website</a>`;
+          this.state.infoWindow.setContent(content);
       })
       .catch(error => {
-        this.state.infoWindow.setContent("Sorry foursqualre data can't be loaded");
+        this.state.infoWindow.setContent("<div class='error-message'>Sorry foursquare data can't be loaded</div>");
       });
-      */
+*/
    }
 
 
@@ -126,17 +126,17 @@ state = {
 
   render() {
     return (
-      <main className='App'>
-       <h1>New York, NY</h1>
+      <ErrorBoundary>
+      <main>
+      <Header/>
        <div className="outerbox">
-       <div className="box1" aria-label="List of Locations">
-        <LocationList locationList={locations} onClickLocations={(marker) => this.populateInfoWindow(marker)}/>
-      </div>
-      <div className="box2">
-        <div id="map" tabIndex="-1" role="application"> Map </div>
-      </div>
+          <LocationList locationList={locations} onClickLocations={(marker) => this.populateInfoWindow(marker)}/>
+        <div className="mapbox">
+          <Map/>
+        </div>
         </div>
       </main>
+      </ErrorBoundary>
     );
   }
 
