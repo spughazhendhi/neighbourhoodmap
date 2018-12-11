@@ -1,12 +1,12 @@
 # Neighborhood Map Project
 This project is developed for Udacity - Front-End Web Developer Nanodegree Program.
-This single page web application built with HTML, CSS, JavaScript, React and API usage.
+This single page web application built with HTML, CSS, JavaScript, React and Foursquare API.
 
 ## Project description:
 - A single page application featuring a neighborhood map and a listing of locations in New York,NY.
-- The Google Maps API is used to generate the map. The Foursquare API is used to get information to display when a marker is clicked.
+- Google Maps API is used to construct the map. The Foursquare API is used to get address information when a marker is clicked.
 
-## Instructions for load the application:
+## Instructions to load the application:
 ### Development Mode
 - Download or Clone the Repository.
 - Install all project dependencies with `npm install`
