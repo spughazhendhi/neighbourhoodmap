@@ -23,17 +23,21 @@ class App extends Component {
   }
 
   /**
-  * @description This function is used to create Google Map
+  * @description This function is used to load Google Map
   */
   initMap() {
+    // Initialize Google Maps
      let map = new window.google.maps.Map(document.getElementById('map'), {
         center: { lat: 40.7127753, lng: -74.0059728 },
         zoom: 15,
         mapTypeControl: false
     });
+
+    //add click event to close infowindow when map is clicked
     window.google.maps.event.addListener(map, 'click', () =>{
        this.closeInfoWindow();
     });
+
     let infoWindow = new window.google.maps.InfoWindow({maxWidth: 320});
     this.setState({
       map: map,
@@ -41,6 +45,8 @@ class App extends Component {
     });
     const bounds = new window.google.maps.LatLngBounds();
     let locationswithMapInfo = [];
+
+    //for each location create marker
     locations.forEach((location,index) => {
       var marker = new window.google.maps.Marker({
         position:  new window.google.maps.LatLng(location.latitude, location.longitude),
@@ -49,9 +55,12 @@ class App extends Component {
         animation: window.google.maps.Animation.DROP,
         id :index
       });
+
+      //add click event listener for marker
       marker.addListener('click',() => {
         this.populateInfoWindow(marker);
       });
+      
       location.marker = marker;
       location.display = true;
       locationswithMapInfo.push(location);
