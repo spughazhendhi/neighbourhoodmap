@@ -60,7 +60,7 @@ class App extends Component {
       marker.addListener('click',() => {
         this.populateInfoWindow(marker);
       });
-      
+
       location.marker = marker;
       location.display = true;
       locationswithMapInfo.push(location);
@@ -113,11 +113,11 @@ class App extends Component {
   */
    getMarkerInfo(marker) {
       const foursquareurl = `https://api.foursquare.com/v2/venues/search?client_id=${FS_CLIENT_ID}
-                  &client_secret=${FS_CLIENT_SECRET} &v=20181212&ll=${marker.getPosition().lat()},${marker.getPosition().lng()}
-                  &limit=1`;
+                            &client_secret=${FS_CLIENT_SECRET} &v=20181212&ll=${marker.getPosition().lat()},${marker.getPosition().lng()}
+                            &limit=1`;
       fetch(foursquareurl)
       .then(response => response.json())
-      .then( data => {
+      .then(data => {
                       let venue = data.response.venues[0];
                       let content = `<b>Name : </b> ${venue.name}<br>
                                      <b>Address : </b> ${venue.location.formattedAddress} <br>
