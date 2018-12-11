@@ -7,11 +7,13 @@ class LocationItem extends React.Component {
      index: PropTypes.number.isRequired,
      onClickLocation: PropTypes.func.isRequired
   }
-  render(){
+
+  render() {
     const location = this.props.location;
-    return(
-       	    <li key={this.props.index}  onClick={ () => this.props.onClickLocation(location.marker)} role="button" className="locationname" tabIndex="0">{location.name}</li>
-      )
+    return (
+       	    <li key={this.props.index}  onClick={ () => this.props.onClickLocation(location.marker)}
+              role="button" className="location-name" tabIndex="0">{location.name}</li>
+          )
   }
 }
 

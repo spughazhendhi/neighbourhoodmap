@@ -1,14 +1,13 @@
-
 body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
 }
 
- #map {
+#map {
    width: 100%;
    height: calc(100vh - 60px);
-  }
+}
 
 .heading {
   width: 100%;
@@ -17,20 +16,21 @@ body {
 }
 
 .filter-input {
-  width: 300px;
+  width: 330px;
   padding: 5px;
 }
-.outerbox {
+
+.outer-box {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
 }
 
-.locationbox {
+.location-box {
   width: 20%
 }
 
-.mapbox {
+.map-box {
   width: 80%
 }
 
@@ -41,25 +41,26 @@ ul {
     margin: 0;
     max-height: 200px;
     list-style-type: none;
+    width:90%
 }
 
-.locationname {
+.location-name {
     cursor: pointer;
     padding: 5px;
 }
 
-.locationname:hover {
+.location-name:hover {
     background-color: #269abc;
     color: white;
 }
 
-.togglebutton {
+.toggle-button {
     text-align: center;
     padding: 5px;
     background-color: #945426;
     border: 1px darkgrey solid;
     cursor: pointer;
-    width: 334px;
+    width: 346px;
 }
 
 .error-message {
@@ -67,19 +68,18 @@ ul {
   font-weight: bold;
 }
 
-.listlocations {
-  width: 100%
-}
-@media (max-width: 820px) {
-  .locationbox{
+@media screen and (min-width: 501px) and (max-width: 850px) {
+  .location-box {
     width: 100%;
     text-align: center;
   }
-  .mapbox{
+
+  .map-box {
     width: 100%
   }
+
   .filter-input {
-    width: 390px;
+    width: 440px;
     height: 25px;
   }
 
@@ -89,22 +89,30 @@ ul {
     margin-right: auto;
     width: 380px;
   }
-  .togglebutton{
-    width: 380px;
+
+  .toggle-button{
+    width: 440px;
   }
 
 }
 
-@media (max-width:450px) {
-  .locationbox {
+@media screen and (max-width: 500px) {
+  .toggle-button{
+    width: 90%;
     text-align: left;
   }
-  .togglebutton{
-    width: 300px;
-  }
+
   .filter-input {
-    width: 300px;
+    width: 90%;
     height: 25px;
+    padding:5px 0px;
+  }
+
+  .location-box{
+    width: 100%;
+  }
+  .map-box{
+    width: 100%
   }
 
 }

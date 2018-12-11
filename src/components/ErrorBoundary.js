@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class ErrorBoundary extends Component {
-  state ={
+  state = {
     hasError: false
   }
 
@@ -9,14 +9,13 @@ class ErrorBoundary extends Component {
      this.setState({ hasError: true });
    }
 
-   render(){
-     if(this.state.hasError){
+   render() {
+     if(this.state.hasError) {
        return <h1>Something went wrong.Please try agaoin</h1>;
-     }else{
+     }else {
        return this.props.children;
      }
    }
-
 }
 
 export default ErrorBoundary;

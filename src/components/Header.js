@@ -1,13 +1,12 @@
 import React  from 'react'
 
 class Header extends React.Component {
-
-  render(){
-    return(
-       <div aria-label="Header">
-          <h1 className="heading">New York,USA</h1>
-      </div>
-      )
+  render() {
+    return (
+            <div aria-label="Header" tabIndex='0' >
+              <h1 className="heading">New York,USA</h1>
+            </div>
+          )
   }
 }
 
